@@ -4,10 +4,14 @@
  */
 package com.mycompany.adpfp;
 
+import com.mycompany.adpfp.gui.LoginPage;
+
 /**
  *
  * @author Marilyn
  */
 public class Main {
-    
+    public static void main(String[] args) {
+    LoginPage loginPage = new LoginPage();
+    }
 }
