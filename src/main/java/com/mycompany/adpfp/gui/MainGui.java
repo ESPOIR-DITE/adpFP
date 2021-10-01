@@ -4,6 +4,8 @@
  */
 package com.mycompany.adpfp.gui;
 
+import com.mycompany.adpfp.gui.venue.Venue;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
@@ -24,7 +26,7 @@ import javax.swing.JTextField;
  */
 public class MainGui extends JFrame implements ActionListener {
     private JPanel menu = new JPanel();
-    private JPanel venuePanel = new JPanel();
+    private JPanel centre = new JPanel();
     private JPanel userPanel = new JPanel();
     private JLabel title = new JLabel("Admin Menu");
     private JButton venue = new JButton("Venue");
@@ -42,8 +44,14 @@ public class MainGui extends JFrame implements ActionListener {
     private JTextField nameField = new JTextField(10);
     private JTextField surnameField = new JTextField(10);
     private JTextField password = new  JTextField(10);
+    private JTextArea textArea = new JTextArea(10,5);
 
     private JButton newUser = new JButton("Create");
+
+    //panels
+    private JPanel venuePanel = new Venue().getCreateVenuePanel();
+
+
 
     public MainGui(String userName,String password) throws HeadlessException {
         super();
@@ -54,13 +62,20 @@ public class MainGui extends JFrame implements ActionListener {
         setVisible(true);
         title.setSize(4,4);
         this.menu = getMenu();
-        add(menu,BorderLayout.WEST);
+
         venue.addActionListener(this);
         user.addActionListener(this);
-        add(new TextArea(10,5),BorderLayout.CENTER);
+
+        venuePanel.setVisible(false);
+
+        //centre.add(textArea);
+        centre.add(venuePanel);
+        add(centre,BorderLayout.CENTER);
         add(new JPanel(),BorderLayout.NORTH);
         add(new JPanel(),BorderLayout.EAST);
         add(new JPanel(),BorderLayout.SOUTH);
+        add(menu,BorderLayout.WEST);
+
     }
     public JPanel getMenu(){
         menu.setLayout(new GridLayout(20,1));
@@ -94,7 +109,21 @@ public class MainGui extends JFrame implements ActionListener {
         user.setBackground(Color.CYAN);
         remove(venuePanel);
         add(userPanel);
+        revalidate();
+        revalidate();
     }
+    if(e.getSource()==venue){
+        //add(new Venue().getCreateVenuePanel(),BorderLayout.CENTER);
+        System.out.println("venue clicked");
+        visibilitize("venue");
+        }
+    }
+    void visibilitize(String panelName){
+        if( panelName.equals("venue")){
+            venuePanel.setVisible( true);
+        }else {
+            textArea.setVisible(false);
+        }
     }
 }
 
