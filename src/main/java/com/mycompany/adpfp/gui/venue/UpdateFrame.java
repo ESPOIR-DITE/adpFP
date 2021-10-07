@@ -12,7 +12,7 @@ public class UpdateFrame  implements ActionListener {
     private JPanel westUpdatePanel = new JPanel();
     private JPanel eastUpdatePanel = new JPanel();
     private JLabel space = new JLabel("");
-    private JLabel title = new JLabel("Update Venue");
+    private JLabel title = new JLabel("UPDATE VENUE",JLabel.CENTER);
     private JLabel nameUpdateLabel = new JLabel("Name");
     private JLabel locationUpdateLabel = new JLabel("Location");
     private JLabel typeUpdateLabel = new JLabel("Type");
@@ -26,11 +26,15 @@ public class UpdateFrame  implements ActionListener {
     private JTextField maxNumOfPplJTextUpdateField = new JTextField(20);
     private JButton updateVenue = new JButton("Update");
     private JButton deleteVenue = new JButton("Delete");
+    private Color btnBrown = new Color(81,43,40);
+    Font f = new Font("Verdana",Font.BOLD,20);
 
     public UpdateFrame() {
         venueUpdatePanel.setLayout(new BorderLayout(5,5));
         updateVenue.addActionListener(this);
         jTextUpdateArea.setEditable(false);
+        title.setFont(f);
+        title.setForeground(btnBrown);
         venueUpdatePanel.add(title,BorderLayout.NORTH);
         venueUpdatePanel.add(getWestUpdatePanel(),BorderLayout.WEST);
         venueUpdatePanel.add(getEastUpdatePanel(),BorderLayout.CENTER);

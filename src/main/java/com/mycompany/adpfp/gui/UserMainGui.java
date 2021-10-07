@@ -31,30 +31,34 @@ public class UserMainGui extends JFrame implements ActionListener {
     private JPanel menu = new JPanel();
     private JPanel centre = new JPanel();
 
-    private JLabel title = new JLabel("User MENU");
-    private JButton venue = new JButton("Venue");
+    private JLabel title = new JLabel("User MENU",JLabel.CENTER);
+    private JButton venue = new JButton("Booking");
     private JButton user = new JButton("Customer");
     private JButton logout = new JButton("Logout");
     private JTextArea menuSpace = new JTextArea(20,7);
-
     //panels
     private JPanel venuePanel = new UserVenueGui().getUserVenuePanel();
     private JPanel userPanel = new CustomerGui().getCustomerGui();
     private JLabel pic;
     private Color btnBrown = new Color(81,43,40);
     private Color btnBrownSelected = new Color(166,123,119);
-
     private JButton newUser = new JButton("Create");
     Border blackline = BorderFactory.createLineBorder(Color.black);
+    Font f = new Font("Verdana",Font.BOLD,15);
 
     public UserMainGui(String userName, String password) throws HeadlessException, IOException {
         super("USER POSTAL");
         setLayout(new BorderLayout(5,5));
-        setSize(700,450);
+        setSize(700,480);
+        venue.setBackground(btnBrown);
+        venue.setBackground(Color.WHITE);
+        user.setBackground(btnBrown);
+        user.setBackground(Color.WHITE);
         setLocationRelativeTo(null);
         setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
         setVisible(true);
 
+        title.setFont(f);
         title.setSize(4,4);
         this.menu = getMenu();
         BufferedImage myPicture = ImageIO.read(getUserImage());

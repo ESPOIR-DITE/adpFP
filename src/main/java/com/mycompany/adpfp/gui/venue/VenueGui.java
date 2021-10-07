@@ -3,6 +3,7 @@ package com.mycompany.adpfp.gui.venue;
 import com.mycompany.adpfp.datas.venue.Venue;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
@@ -16,7 +17,7 @@ public class VenueGui extends JFrame implements ActionListener {
     private JPanel westPanel = new JPanel();
     private JPanel eastPanel = new JPanel();
     private JLabel space = new JLabel("");
-    private JLabel title = new JLabel("Create Venue");
+    private JLabel title = new JLabel("Create Venue",JLabel.CENTER);
     private JLabel nameLabel = new JLabel("Name");
     private JLabel locationLabel = new JLabel("Location");
     private JLabel typeLabel = new JLabel("Type");
@@ -35,13 +36,24 @@ public class VenueGui extends JFrame implements ActionListener {
     JFrame jFrame = new JFrame();
     JFrame updateFrame = new JFrame();
 
-    private JTextArea jTextArea = new JTextArea(30,50);
-    JPanel venueUpdatePanel = new JPanel();
+    private JTextArea jTextArea = new JTextArea(4,50);
 
+    private Color btnBrown = new Color(81,43,40);
+    private Color btnBrownSelected = new Color(166,123,119);
+    Border blackline = BorderFactory.createLineBorder(Color.black);
+    Font f = new Font("Verdana",Font.BOLD,20);
     public VenueGui() throws HeadlessException {
         createVenuePanel.setLayout(new BorderLayout(10,10));
         createVenue.addActionListener(this);
+        jTextArea.setBorder(blackline);
         viewVenue.addActionListener(this);
+        createVenue.setBackground(btnBrown);
+        createVenue.setForeground(Color.WHITE);
+        viewVenue.setBackground(btnBrown);
+        viewVenue.setForeground(Color.WHITE);
+
+        title.setFont(f);
+        title.setForeground(btnBrown);
         createVenuePanel.add(title,BorderLayout.NORTH);
         createVenuePanel.add(getWestPanel(),BorderLayout.WEST);
         createVenuePanel.add(getEastPanel(),BorderLayout.CENTER);
@@ -119,7 +131,7 @@ public class VenueGui extends JFrame implements ActionListener {
     }
 
     public JPanel getWestPanel() {
-        westPanel.setLayout(new GridLayout(10,1));
+        westPanel.setLayout(new GridLayout(9,1,5,5));
         westPanel.add(nameLabel);
         westPanel.add(locationLabel);
         westPanel.add(typeLabel);
@@ -129,7 +141,7 @@ public class VenueGui extends JFrame implements ActionListener {
     }
 
     public JPanel getEastPanel() {
-        eastPanel.setLayout(new GridLayout(10,1));
+        eastPanel.setLayout(new GridLayout(9,1,5,5));
         eastPanel.add(nameJTextField);
         eastPanel.add(locationJTextField);
         eastPanel.add(typeJTextField);

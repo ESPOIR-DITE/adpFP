@@ -4,10 +4,7 @@
  */
 package com.mycompany.adpfp.gui;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.GridLayout;
-import java.awt.HeadlessException;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -23,14 +20,15 @@ import javax.swing.JTextField;
  */
 public class LoginPage extends JFrame implements ActionListener {
     private JPanel loginPanel = new JPanel();
-    private JLabel title = new JLabel("LogIn");
+    private JLabel title = new JLabel("LogIn",JLabel.CENTER);
     private JLabel space = new JLabel("  ");
     private JLabel userName = new JLabel("Username");
     private JTextField userNameField = new JTextField(10);
     private JTextField passwordField = new JTextField(10);
     private JLabel password = new JLabel("Password");
     private JButton loginBTN = new JButton("Sing in");
-
+    private Color btnBrown = new Color(81,43,40);
+    Font f = new Font("Verdana",Font.BOLD,20);
     public LoginPage() throws HeadlessException {
         super();
         setLayout(new BorderLayout());
@@ -39,7 +37,13 @@ public class LoginPage extends JFrame implements ActionListener {
         setLocationRelativeTo(null);
         setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
         setVisible(true);
+        title.setFont(f);
+        title.setForeground(btnBrown);
+        userName.setForeground(btnBrown);
+        password.setForeground(btnBrown);
         this.loginBTN.addActionListener(this);
+        this.loginBTN.setBackground(btnBrown);
+        this.loginBTN.setForeground(Color.WHITE);
         add(loginPanel,BorderLayout.CENTER);
         add(new JPanel(),BorderLayout.NORTH);
         add(new JPanel(),BorderLayout.WEST);
@@ -84,7 +88,7 @@ public class LoginPage extends JFrame implements ActionListener {
             String password = getPassword();
             if(!userName.isEmpty()&&!password.isEmpty()){
                 close();
-                if(userName == "Admin"){
+                if(userName.equals("Admin")){
                     try {
                         AdminMainGui adminMainGui = new AdminMainGui(userName,password);
                     } catch (IOException ioException) {

@@ -12,7 +12,7 @@ import java.awt.event.ActionListener;
 import java.nio.file.Paths;
 
 public class CustomerGui implements ActionListener {
-    private JLabel userTitleLabel = new JLabel("NEW CUSTOMER");
+    private JLabel userTitleLabel = new JLabel("NEW CUSTOMER",JLabel.CENTER);
     private JLabel emailLabel = new JLabel("Email");
     private JLabel nameLabel = new JLabel("Name");
     private JLabel surnameLabel = new JLabel("Surname");
@@ -22,27 +22,34 @@ public class CustomerGui implements ActionListener {
     private JTextField nameField = new JTextField(20);
     private JTextField surnameField = new JTextField(20);
     private JTextField password = new  JTextField(20);
-    private JTextArea jTextArea = new JTextArea(30,50);
+    private JTextArea jTextArea = new JTextArea(4,50);
     private JButton newUser = new JButton("Create Customer");
     private JButton viewVenue = new JButton("View Customer");
-
 
     private JPanel userPanel = new JPanel();
     private JPanel westPanel = new JPanel();
     private JPanel eastPanel = new JPanel();
-
     JTable table = new JTable();
     JFrame jFrame = new JFrame();
     JFrame updateFrame = new JFrame();
-
     Border blackline = BorderFactory.createLineBorder(Color.black);
+    private Color btnBrown = new Color(81,43,40);
+    private Color btnBrownSelected = new Color(166,123,119);
+    Font f = new Font("Verdana",Font.BOLD,20);
 
     public CustomerGui() {
         userPanel.setLayout(new BorderLayout(10,10));
         newUser.addActionListener(this);
         viewVenue.addActionListener(this);
 
+        newUser.setBackground(btnBrown);
+        newUser.setForeground(Color.WHITE);
+        viewVenue.setBackground(btnBrown);
+        viewVenue.setForeground(Color.WHITE);
+
         jTextArea.setBorder(blackline);
+        userTitleLabel.setFont(f);
+        userTitleLabel.setForeground(btnBrown);
         userPanel.add(userTitleLabel,BorderLayout.NORTH);
         userPanel.add(getEastPanel(),BorderLayout.CENTER);
         userPanel.add(getWestPanel(),BorderLayout.WEST);
@@ -117,7 +124,7 @@ public class CustomerGui implements ActionListener {
         return userPanel;
     }
     JPanel getWestPanel(){
-        westPanel.setLayout(new GridLayout(10,1));
+        westPanel.setLayout(new GridLayout(9,1,5,5));
         this.westPanel.add(emailLabel);
         this.westPanel.add(nameLabel);
         this.westPanel.add(surnameLabel);
@@ -125,7 +132,7 @@ public class CustomerGui implements ActionListener {
         return westPanel;
     }
     JPanel getEastPanel(){
-        eastPanel.setLayout(new GridLayout(10,1));
+        eastPanel.setLayout(new GridLayout(9,1,5,5));
         this.eastPanel.add(emailField);
         this.eastPanel.add(nameField);
         this.eastPanel.add(surnameField);

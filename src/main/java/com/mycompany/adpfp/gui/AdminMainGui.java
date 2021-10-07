@@ -7,10 +7,7 @@ package com.mycompany.adpfp.gui;
 import com.mycompany.adpfp.gui.user.UserGui;
 import com.mycompany.adpfp.gui.venue.VenueGui;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.GridLayout;
-import java.awt.HeadlessException;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -20,6 +17,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
 
+import static com.mycompany.adpfp.util.Images.getAdminImage;
 import static com.mycompany.adpfp.util.Images.getUserImage;
 
 /**
@@ -30,7 +28,7 @@ public class AdminMainGui extends JFrame implements ActionListener {
     private JPanel menu = new JPanel();
     private JPanel centre = new JPanel();
 
-    private JLabel title = new JLabel("ADMIN MENU");
+    private JLabel title = new JLabel("ADMIN MENU",JLabel.CENTER);
     private JButton venue = new JButton("Venue");
     private JButton user = new JButton("User");
     private JButton logout = new JButton("Logout");
@@ -45,19 +43,21 @@ public class AdminMainGui extends JFrame implements ActionListener {
 
     private JButton newUser = new JButton("Create");
 
+    Font f = new Font("Verdana",Font.BOLD,15);
     Border blackline = BorderFactory.createLineBorder(Color.black);
     public AdminMainGui(String userName, String password) throws HeadlessException, IOException {
         super("ADMIN POSTAL");
         setLayout(new BorderLayout(5,5));
-        setSize(700,450);
+        setSize(700,480);
         setLocationRelativeTo(null);
         setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
         setVisible(true);
 
         title.setSize(4,4);
+        title.setFont(f);
         this.menu = getMenu();
         this.menu.setBorder(blackline);
-        BufferedImage myPicture = ImageIO.read(getUserImage());
+        BufferedImage myPicture = ImageIO.read(getAdminImage());
         pic = new JLabel(new ImageIcon(myPicture));
 
         buttonsColor();
