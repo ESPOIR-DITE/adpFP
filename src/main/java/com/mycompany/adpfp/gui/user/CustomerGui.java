@@ -3,14 +3,16 @@ package com.mycompany.adpfp.gui.user;
 import com.mycompany.adpfp.gui.venue.UpdateFrame;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.nio.file.Paths;
 
-public class UserGui implements ActionListener {
-    private JLabel userTitleLabel = new JLabel("NEW USER");
+public class CustomerGui implements ActionListener {
+    private JLabel userTitleLabel = new JLabel("NEW CUSTOMER");
     private JLabel emailLabel = new JLabel("Email");
     private JLabel nameLabel = new JLabel("Name");
     private JLabel surnameLabel = new JLabel("Surname");
@@ -21,8 +23,8 @@ public class UserGui implements ActionListener {
     private JTextField surnameField = new JTextField(20);
     private JTextField password = new  JTextField(20);
     private JTextArea jTextArea = new JTextArea(30,50);
-    private JButton newUser = new JButton("Create User");
-    private JButton viewVenue = new JButton("View Users");
+    private JButton newUser = new JButton("Create Customer");
+    private JButton viewVenue = new JButton("View Customer");
 
 
     private JPanel userPanel = new JPanel();
@@ -33,11 +35,14 @@ public class UserGui implements ActionListener {
     JFrame jFrame = new JFrame();
     JFrame updateFrame = new JFrame();
 
-    public UserGui() {
+    Border blackline = BorderFactory.createLineBorder(Color.black);
+
+    public CustomerGui() {
         userPanel.setLayout(new BorderLayout(10,10));
         newUser.addActionListener(this);
         viewVenue.addActionListener(this);
 
+        jTextArea.setBorder(blackline);
         userPanel.add(userTitleLabel,BorderLayout.NORTH);
         userPanel.add(getEastPanel(),BorderLayout.CENTER);
         userPanel.add(getWestPanel(),BorderLayout.WEST);
@@ -45,7 +50,7 @@ public class UserGui implements ActionListener {
     }
 
     public JFrame getTableJFrame(){
-        jFrame.setTitle("Venues");
+        jFrame.setTitle("CUstomers");
 
         String [] columnNames = {"Name","Location","Type","Cost","Max Num Of Ppl"};
         String [][] data = {
@@ -108,7 +113,7 @@ public class UserGui implements ActionListener {
         updateFrame.setVisible(true);
         updateFrame.setSize(500,400);
     }
-    public JPanel getUserGui(){
+    public JPanel getCustomerGui(){
         return userPanel;
     }
     JPanel getWestPanel(){
@@ -135,6 +140,7 @@ public class UserGui implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == newUser){
             System.out.println("voila");
+            System.out.println(Paths.get("").toAbsolutePath().toString()+"");
         }
         if(e.getSource() == viewVenue){
             System.out.println("view clicked");

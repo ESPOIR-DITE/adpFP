@@ -5,12 +5,12 @@
 package com.mycompany.adpfp.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -35,7 +35,7 @@ public class LoginPage extends JFrame implements ActionListener {
         super();
         setLayout(new BorderLayout());
         loginPanel =  getLoginPage();
-        setSize(250,200);
+        setSize(250,250);
         setLocationRelativeTo(null);
         setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
         setVisible(true);
@@ -44,11 +44,12 @@ public class LoginPage extends JFrame implements ActionListener {
         add(new JPanel(),BorderLayout.NORTH);
         add(new JPanel(),BorderLayout.WEST);
         add(new JPanel(),BorderLayout.EAST);
+        add(new JPanel(),BorderLayout.SOUTH);
     }
 
     public JPanel getLoginPage(){
         loginPanel.setLayout(new GridLayout(8,1));
-        loginPanel.setBackground(Color.PINK);
+        //loginPanel.setBackground(Color.PINK);
         loginPanel.setPreferredSize(new Dimension(20,20));
         loginPanel.add(title);
         loginPanel.add(space);
@@ -83,7 +84,20 @@ public class LoginPage extends JFrame implements ActionListener {
             String password = getPassword();
             if(!userName.isEmpty()&&!password.isEmpty()){
                 close();
-                MainGui mainGui = new MainGui(userName,password);
+                if(userName == "Admin"){
+                    try {
+                        AdminMainGui adminMainGui = new AdminMainGui(userName,password);
+                    } catch (IOException ioException) {
+                        ioException.printStackTrace();
+                    }
+                }else {
+                    try {
+                        UserMainGui userMainGui = new UserMainGui(userName,password);
+                    } catch (IOException ioException) {
+                        ioException.printStackTrace();
+                    }
+                }
+
             }
         }
     }

@@ -8,8 +8,11 @@ import java.awt.BorderLayout;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+import javax.swing.*;
 
 /**
  *
@@ -20,7 +23,7 @@ public class Gui extends JFrame implements ActionListener {
     private JPanel loginPanel;
 
     private JPanel adminMenu = new JPanel();
-    public Gui() throws HeadlessException {
+    public Gui() throws HeadlessException, IOException {
         super();
         setLayout(new BorderLayout());
         loginPanel = new LoginPage().getLoginPage();
