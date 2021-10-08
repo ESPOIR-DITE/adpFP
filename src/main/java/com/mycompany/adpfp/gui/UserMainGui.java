@@ -124,7 +124,8 @@ public class UserMainGui extends JFrame implements ActionListener {
         }
     if(e.getSource()==logout){
         this.dispose();
-        LoginPage loginPage = new LoginPage();
+        //Todo will have to remove the comment bellow.
+        //LoginPage loginPage = new LoginPage();
     }
     }
     void visibilitize(String panelName){

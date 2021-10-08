@@ -5,6 +5,7 @@
 package com.mycompany.adpfp;
 
 import com.mycompany.adpfp.gui.LoginPage;
+import com.mycompany.adpfp.io.NewClient;
 
 /**
  *
@@ -12,6 +13,7 @@ import com.mycompany.adpfp.gui.LoginPage;
  */
 public class Main {
     public static void main(String[] args) {
-    LoginPage loginPage = new LoginPage();
+        NewClient newClient = new NewClient();
+    LoginPage loginPage = new LoginPage(newClient);
     }
 }

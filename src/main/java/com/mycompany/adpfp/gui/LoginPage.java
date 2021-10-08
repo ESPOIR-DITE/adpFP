@@ -4,6 +4,9 @@
  */
 package com.mycompany.adpfp.gui;
 
+import com.mycompany.adpfp.io.NewClient;
+import com.mycompany.adpfp.util.ServerTokenFactory;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -29,11 +32,13 @@ public class LoginPage extends JFrame implements ActionListener {
     private JButton loginBTN = new JButton("Sing in");
     private Color btnBrown = new Color(81,43,40);
     Font f = new Font("Verdana",Font.BOLD,20);
-    public LoginPage() throws HeadlessException {
+    private NewClient newClient;
+    public LoginPage(NewClient newClient) throws HeadlessException {
         super();
         setLayout(new BorderLayout());
         loginPanel =  getLoginPage();
         setSize(250,250);
+        this.newClient = newClient;
         setLocationRelativeTo(null);
         setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
         setVisible(true);
@@ -88,6 +93,7 @@ public class LoginPage extends JFrame implements ActionListener {
             String password = getPassword();
             if(!userName.isEmpty()&&!password.isEmpty()){
                 close();
+                newClient.communicate(ServerTokenFactory.logIn(userName,password));
                 if(userName.equals("Admin")){
                     try {
                         AdminMainGui adminMainGui = new AdminMainGui(userName,password);
