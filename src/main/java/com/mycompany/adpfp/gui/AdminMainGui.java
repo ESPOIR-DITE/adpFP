@@ -6,6 +6,7 @@ package com.mycompany.adpfp.gui;
 
 import com.mycompany.adpfp.gui.user.UserGui;
 import com.mycompany.adpfp.gui.venue.VenueGui;
+import com.mycompany.adpfp.io.NewClient;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -34,8 +35,11 @@ public class AdminMainGui extends JFrame implements ActionListener {
     private JButton logout = new JButton("Logout");
     private JTextArea menuSpace = new JTextArea(20,7);
 
+    //
+    VenueGui venueGui = null;
+    UserGui userGui = new UserGui();
     //panels
-    private JPanel venuePanel = new VenueGui().getCreateVenuePanel();
+    private JPanel venuePanel = null;
     private JPanel userPanel = new UserGui().getUserGui();
     private JLabel pic;
     private Color btnBrown = new Color(81,43,40);
@@ -45,13 +49,19 @@ public class AdminMainGui extends JFrame implements ActionListener {
 
     Font f = new Font("Verdana",Font.BOLD,15);
     Border blackline = BorderFactory.createLineBorder(Color.black);
-    public AdminMainGui(String userName, String password) throws HeadlessException, IOException {
+    private NewClient newClient;
+    public AdminMainGui(String userName, String password, NewClient newClient) throws HeadlessException, IOException {
         super("ADMIN POSTAL");
+        this.venueGui = new VenueGui(newClient);
+        this.venuePanel = new VenueGui(newClient).getCreateVenuePanel();
+        this.newClient = newClient;
         setLayout(new BorderLayout(5,5));
         setSize(700,480);
         setLocationRelativeTo(null);
         setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
         setVisible(true);
+
+        userGui.setClient(this.newClient);
 
         title.setSize(4,4);
         title.setFont(f);
@@ -121,7 +131,7 @@ public class AdminMainGui extends JFrame implements ActionListener {
     if(e.getSource()==logout){
         this.dispose();
         //Todo will have to remove the comment bellow.
-        //LoginPage loginPage = new LoginPage();
+        LoginPage loginPage = new LoginPage(newClient);
     }
     }
     void visibilitize(String panelName){

@@ -11,6 +11,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.StringTokenizer;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -93,10 +94,12 @@ public class LoginPage extends JFrame implements ActionListener {
             String password = getPassword();
             if(!userName.isEmpty()&&!password.isEmpty()){
                 close();
-                newClient.communicate(ServerTokenFactory.logIn(userName,password));
-                if(userName.equals("Admin")){
+                String result = this.newClient.communicate(ServerTokenFactory.logIn(userName,password));
+                System.out.println(result);
+                //getUser(result);
+                if(getUser(result).equals("admin")){
                     try {
-                        AdminMainGui adminMainGui = new AdminMainGui(userName,password);
+                        AdminMainGui adminMainGui = new AdminMainGui(userName,password,this.newClient);
                     } catch (IOException ioException) {
                         ioException.printStackTrace();
                     }
@@ -110,6 +113,16 @@ public class LoginPage extends JFrame implements ActionListener {
 
             }
         }
+    }
+
+    String getUser(String response){
+        StringTokenizer st = new StringTokenizer(response,"/");
+        st.nextToken();
+        st.nextToken();
+        st.nextToken();
+        st.nextToken();
+        st.nextToken();
+        return st.nextToken();
     }
 
    

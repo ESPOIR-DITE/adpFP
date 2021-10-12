@@ -1,16 +1,20 @@
 package com.mycompany.adpfp.gui.venue;
 
 import com.mycompany.adpfp.datas.venue.Venue;
+import com.mycompany.adpfp.io.NewClient;
+import com.mycompany.adpfp.io.venue.VenueIO;
 
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import javax.xml.crypto.Data;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
+import java.util.Date;
 
 public class VenueGui extends JFrame implements ActionListener {
     private JPanel createVenuePanel = new JPanel();
@@ -29,8 +33,8 @@ public class VenueGui extends JFrame implements ActionListener {
     private JTextField typeJTextField = new JTextField(20);
     private JTextField costJTextField = new JTextField(20);
     private JTextField maxNumOfPplJTextField = new JTextField(20);
-    private JButton createVenue = new JButton("Create Bookings");
-    private JButton viewVenue = new JButton("View Bookings");
+    private JButton createVenue = new JButton("Create Venue");
+    private JButton viewVenue = new JButton("View Venues");
     JTable table = new JTable();
 
     JFrame jFrame = new JFrame();
@@ -42,7 +46,10 @@ public class VenueGui extends JFrame implements ActionListener {
     private Color btnBrownSelected = new Color(166,123,119);
     Border blackline = BorderFactory.createLineBorder(Color.black);
     Font f = new Font("Verdana",Font.BOLD,20);
-    public VenueGui() throws HeadlessException {
+    private NewClient newClient;
+    private VenueIO venueIO = new VenueIO();
+    public VenueGui(NewClient newClient) throws HeadlessException {
+        this.newClient = newClient;
         createVenuePanel.setLayout(new BorderLayout(10,10));
         createVenue.addActionListener(this);
         jTextArea.setBorder(blackline);
@@ -154,30 +161,26 @@ public class VenueGui extends JFrame implements ActionListener {
         return eastPanel;
     }
 
-    private VenueGui getVenue(){
-        String name = null;
-        String location = null;
-        String type = null;
-        String cost = null;
-        String maxNumOfPpl = null;
-        Venue venue = null;
-        if ((name = checkIfEmpty(nameJTextField.getText(),"Name"))==null) clearFields();
-        if ((location = checkIfEmpty(locationJTextField.getText(),"Location"))==null) clearFields();
-        if ((type = checkIfEmpty(typeJTextField.getText(),"Category"))==null) clearFields();
-        if ((cost = checkIfEmpty(costJTextField.getText(),"Cost"))==null) clearFields();
-        if ((maxNumOfPpl = checkIfEmpty(maxNumOfPplJTextField.getText(),"Max"))==null) clearFields();
-
+    private Venue getVenue(){
         try{
-            venue = new Venue("389ru",name,location,Double.parseDouble(cost),Integer.parseInt(maxNumOfPpl), LocalDate.now(),type);
+            String name = nameJTextField.getText();
+            String location = locationJTextField.getText();
+            String type = typeJTextField.getText();
+            double cost = Double.parseDouble(costJTextField.getText());
+            int maxNumOfPpl = Integer.parseInt(maxNumOfPplJTextField.getText());
+            boolean availability = true;
+            String date = new Date().toString();
 
-            if(venue.isNull()){
-                System.out.println(venue.toString());
-                clearFields();
-            }else {
-                System.out.println("Fields missing");
-                System.out.println(venue.toString());
-                clearFields();
-            }
+            return Venue.builder()
+                    .name(name)
+                    .location(location)
+                    .categoryId(type)
+                    .cost(cost)
+                    .date(date)
+                    .availability(availability)
+                    .description("test")
+                    .maxNumGuest(maxNumOfPpl)
+                    .build();
 
         }catch (NullPointerException nullPointerException){
             clearFields();
@@ -198,23 +201,43 @@ public class VenueGui extends JFrame implements ActionListener {
         maxNumOfPplJTextField.setText("");
     }
 
-    String checkIfEmpty(String field,String errorName){
-        if(field.equals("")){
-            JOptionPane.showMessageDialog(this,errorName+" missing");
-            return null;
+    boolean checkIfEmpty(){
+        if (nameJTextField.getText().equals("")) {
+            JOptionPane.showMessageDialog(this,"Name missing");
+            return false;
         }
-        return field;
+        if (locationJTextField.getText().equals("")) {
+            JOptionPane.showMessageDialog(this,"Location missing");
+            return false;
+        }
+        if (typeJTextField.getText().equals("")) {
+            JOptionPane.showMessageDialog(this,"Type missing");
+            return false;
+        }
+        if (costJTextField.getText().equals("")) {
+            JOptionPane.showMessageDialog(this,"Cost missing");
+            return false;
+        }
+        if (maxNumOfPplJTextField.getText().equals("")) {
+            JOptionPane.showMessageDialog(this,"Num of Guests missing");
+            return false;
+        }
+        return true;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource()==createVenue){
             System.out.println("voila");
-            getVenue();
+            if(checkIfEmpty()){
+                System.out.println(venueIO.createVenue(this.newClient,getVenue()));
+            }
         }
         if(e.getSource() == viewVenue){
             System.out.println("view clicked");
-            getTableJFrame();
+            TableGui tableGui  = new TableGui();
+            tableGui.getTableJFrame(venueIO.readVenues(this.newClient));
+            //getTableJFrame();
         }
     }
 }

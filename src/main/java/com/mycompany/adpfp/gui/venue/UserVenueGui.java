@@ -10,6 +10,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
+import java.util.Date;
 
 public class UserVenueGui extends JFrame implements ActionListener {
     private JPanel createVenuePanel = new JPanel();
@@ -166,30 +167,25 @@ public class UserVenueGui extends JFrame implements ActionListener {
         return eastPanel;
     }
 
-    private UserVenueGui getVenue(){
-        String name = null;
-        String location = null;
-        String type = null;
-        String cost = null;
-        String maxNumOfPpl = null;
-        Venue venue = null;
-        if ((name = checkIfEmpty(nameJTextField.getText(),"Name"))==null) clearFields();
-        if ((location = checkIfEmpty(locationJTextField.getText(),"Location"))==null) clearFields();
-        if ((type = checkIfEmpty(typeJTextField.getText(),"Category"))==null) clearFields();
-        if ((cost = checkIfEmpty(costJTextField.getText(),"Cost"))==null) clearFields();
-        if ((maxNumOfPpl = checkIfEmpty(maxNumOfPplJTextField.getText(),"Max"))==null) clearFields();
-
+    private Venue getVenue(){
         try{
-            venue = new Venue("389ru",name,location,Double.parseDouble(cost),Integer.parseInt(maxNumOfPpl), LocalDate.now(),type);
+            String name = nameJTextField.getText();
+            String location = locationJTextField.getText();
+            String type = typeJTextField.getText();
+            double cost = Double.parseDouble(costJTextField.getText());
+            int maxNumOfPpl = Integer.parseInt(maxNumOfPplJTextField.getText());
+            boolean availability = true;
+            String date = new Date().toString();
 
-            if(venue.isNull()){
-                System.out.println(venue.toString());
-                clearFields();
-            }else {
-                System.out.println("Fields missing");
-                System.out.println(venue.toString());
-                clearFields();
-            }
+            return Venue.builder()
+                    .name(name)
+                    .location(location)
+                    .categoryId(type)
+                    .cost(cost)
+                    .date(date)
+                    .availability(availability)
+                    .maxNumGuest(maxNumOfPpl)
+                    .build();
 
         }catch (NullPointerException nullPointerException){
             clearFields();

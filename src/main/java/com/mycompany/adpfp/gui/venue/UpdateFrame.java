@@ -8,37 +8,35 @@ import java.awt.event.ActionListener;
 public class UpdateFrame  implements ActionListener {
     JFrame updateJFrame = new JFrame();
     private JTextArea jTextUpdateArea = new JTextArea(3,5);
-    JPanel venueUpdatePanel = new JPanel();
+    JPanel userUpdatePanel = new JPanel();
     private JPanel westUpdatePanel = new JPanel();
     private JPanel eastUpdatePanel = new JPanel();
     private JLabel space = new JLabel("");
     private JLabel title = new JLabel("UPDATE VENUE",JLabel.CENTER);
     private JLabel nameUpdateLabel = new JLabel("Name");
-    private JLabel locationUpdateLabel = new JLabel("Location");
-    private JLabel typeUpdateLabel = new JLabel("Type");
-    private JLabel costUpdateLabel = new JLabel("Cost");
-    private JLabel MaxNumbOfPplUpdateLabel = new JLabel("Max Num Of Ppl");
+    private JLabel emailUpdateLabel = new JLabel("Email");
+    private JLabel surnameUpdateLabel = new JLabel("Surname");
+    private JLabel dateUpdateLabel = new JLabel("Date");
 
     private JTextField nameJTextUpdateField = new JTextField(20);
-    private JTextField locationJTextUpdateField = new JTextField(20);
-    private JTextField typeJTextUpdateField = new JTextField(20);
-    private JTextField costJTextUpdateField = new JTextField(20);
-    private JTextField maxNumOfPplJTextUpdateField = new JTextField(20);
-    private JButton updateVenue = new JButton("Update");
-    private JButton deleteVenue = new JButton("Delete");
+    private JTextField emailJTextUpdateField = new JTextField(20);
+    private JTextField surnameJTextUpdateField = new JTextField(20);
+    private JTextField dateJTextUpdateField = new JTextField(20);
+    private JButton updateUser = new JButton("Update");
+    private JButton deleteUser = new JButton("Delete");
     private Color btnBrown = new Color(81,43,40);
     Font f = new Font("Verdana",Font.BOLD,20);
 
     public UpdateFrame() {
-        venueUpdatePanel.setLayout(new BorderLayout(5,5));
-        updateVenue.addActionListener(this);
+        userUpdatePanel.setLayout(new BorderLayout(5,5));
+        updateUser.addActionListener(this);
         jTextUpdateArea.setEditable(false);
         title.setFont(f);
         title.setForeground(btnBrown);
-        venueUpdatePanel.add(title,BorderLayout.NORTH);
-        venueUpdatePanel.add(getWestUpdatePanel(),BorderLayout.WEST);
-        venueUpdatePanel.add(getEastUpdatePanel(),BorderLayout.CENTER);
-        venueUpdatePanel.add(jTextUpdateArea,BorderLayout.SOUTH);
+        userUpdatePanel.add(title,BorderLayout.NORTH);
+        userUpdatePanel.add(getWestUpdatePanel(),BorderLayout.WEST);
+        userUpdatePanel.add(getEastUpdatePanel(),BorderLayout.CENTER);
+        userUpdatePanel.add(jTextUpdateArea,BorderLayout.SOUTH);
     }
 
     public JPanel getUpdateVenue(int rowSelected, JTable mode) {
@@ -46,46 +44,42 @@ public class UpdateFrame  implements ActionListener {
                 mode.getModel().getValueAt(rowSelected,0).toString(),
                 mode.getModel().getValueAt(rowSelected,1).toString(),
                 mode.getModel().getValueAt(rowSelected,2).toString(),
-                mode.getModel().getValueAt(rowSelected,3).toString(),
-                mode.getModel().getValueAt(rowSelected,4).toString()
+                mode.getModel().getValueAt(rowSelected,3).toString()
                 );
-        return venueUpdatePanel;
+        return userUpdatePanel;
     }
-    private void setUpdateVenueData(String name, String location, String cost, String maxNumGuest, String categoryId){
+    private void setUpdateVenueData(String email, String name, String surname, String date){
         nameJTextUpdateField.setText(name);
-        locationJTextUpdateField.setText(location);
-        typeJTextUpdateField.setText(categoryId);
-        costJTextUpdateField.setText(cost);
-        maxNumOfPplJTextUpdateField.setText(maxNumGuest);
-        jTextUpdateArea.setText("date");
+        emailJTextUpdateField.setText(email);
+        dateJTextUpdateField.setText(date);
+        surnameJTextUpdateField.setText(surname);
+        jTextUpdateArea.setText("READY TO UPDATE !!");
     }
 
     public JPanel getWestUpdatePanel() {
-        westUpdatePanel.setLayout(new GridLayout(10,1));
+        westUpdatePanel.setLayout(new GridLayout(9,1));
         westUpdatePanel.add(nameUpdateLabel);
-        westUpdatePanel.add(locationUpdateLabel);
-        westUpdatePanel.add(typeUpdateLabel);
-        westUpdatePanel.add(costUpdateLabel);
-        westUpdatePanel.add(MaxNumbOfPplUpdateLabel);
+        westUpdatePanel.add(emailUpdateLabel);
+        westUpdatePanel.add(surnameUpdateLabel);
+        westUpdatePanel.add(dateUpdateLabel);
         return westUpdatePanel;
     }
 
     public JPanel getEastUpdatePanel() {
-        eastUpdatePanel.setLayout(new GridLayout(10,1));
+        eastUpdatePanel.setLayout(new GridLayout(9,1));
         eastUpdatePanel.add(nameJTextUpdateField);
-        eastUpdatePanel.add(locationJTextUpdateField);
-        eastUpdatePanel.add(typeJTextUpdateField);
-        eastUpdatePanel.add(costJTextUpdateField);
-        eastUpdatePanel.add(maxNumOfPplJTextUpdateField);
+        eastUpdatePanel.add(emailJTextUpdateField);
+        eastUpdatePanel.add(surnameJTextUpdateField);
+        eastUpdatePanel.add(dateJTextUpdateField);
         eastUpdatePanel.add(space);
-        eastUpdatePanel.add(updateVenue);
-        eastUpdatePanel.add(deleteVenue);
+        eastUpdatePanel.add(updateUser);
+        eastUpdatePanel.add(deleteUser);
         return eastUpdatePanel;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource()==updateVenue){
+        if(e.getSource()== updateUser){
             System.out.println("about to update");
         }
 
