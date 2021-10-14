@@ -14,14 +14,27 @@ public class UserCredentialFactory {
         return  userCredentials.getId()+"/"+userCredentials.getEmail()+"/"+userCredentials.getPassword()+"/"+userCredentials.getActive()+"/"+userCredentials.getCreator()+"/"+userCredentials.getUserTypeId();
     }
     public static UserCredentials getUserCredentialFromToken(String token){
-        StringTokenizer st = new StringTokenizer(token,"/");
-        return UserCredentials.builder()
-                .id(st.nextToken())
-                .email(st.nextToken())
-                .password(st.nextToken())
-                .active(Boolean.parseBoolean(st.nextToken()))
-                .creator(st.nextToken())
-                .userTypeId(st.nextToken()).build();
+        try{
+            StringTokenizer st = new StringTokenizer(token,"/");
+            return UserCredentials.builder()
+                    .id(st.nextToken())
+                    .email(st.nextToken())
+                    .password(st.nextToken())
+                    .active(Boolean.parseBoolean(st.nextToken()))
+                    .creator(st.nextToken())
+                    .userTypeId(st.nextToken()).build();
+        }catch (NullPointerException nullPointerException){
+            return null;
+        }
+
+    }
+    public static String readUserCredential(String email){
+        return   new ServerTokenFactory().getJson(ServerToken.builder()
+                .request("read")
+                .date(new Date())
+                .domain("user-credential")
+                .value(email)
+                .build());
     }
     public static String createNewUserCredential(UserCredentials users){
         return   new ServerTokenFactory().getJson(ServerToken.builder()
@@ -29,6 +42,22 @@ public class UserCredentialFactory {
                 .date(new Date())
                 .domain("user-credential")
                 .value(getUserCredentialFromObject(users))
+                .build());
+    }
+    public static String activateUser(String email){
+        return   new ServerTokenFactory().getJson(ServerToken.builder()
+                .request("activate")
+                .date(new Date())
+                .domain("user-credential")
+                .value(email)
+                .build());
+    }
+    public static String deactivateUser(String email){
+        return   new ServerTokenFactory().getJson(ServerToken.builder()
+                .request("deactivate")
+                .date(new Date())
+                .domain("user-credential")
+                .value(email)
                 .build());
     }
 

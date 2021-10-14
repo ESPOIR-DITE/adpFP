@@ -68,7 +68,7 @@ public class NewClient {
                 Logger.getLogger(ClientApp.class.getName()).log(Level.SEVERE, null, ex);
             }
             response = (String)in.readObject();
-            System.out.println("From SERVER>> " + response);
+            //System.out.println("From SERVER>> " + response);
 
             // Step 3: close down
         }catch (IOException ioe)

@@ -1,7 +1,8 @@
-package com.mycompany.adpfp.gui.user;
+package com.mycompany.adpfp.gui.user.customer;
 
-import com.mycompany.adpfp.datas.user.Users;
-import com.mycompany.adpfp.gui.venue.UpdateFrame;
+import com.mycompany.adpfp.datas.customer.Customer;
+import com.mycompany.adpfp.gui.user.customer.UpdateFrame;
+import com.mycompany.adpfp.io.NewClient;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -13,8 +14,9 @@ public class TableGui {
     JFrame jFrame = new JFrame();
     JFrame updateFrame = new JFrame();
     JTable table = new JTable();
+    private NewClient newClient;
 
-    static String[][] listToArray(List<Users> list) {
+    static String[][] listToArray(List<Customer> list) {
         int size = list.size();
         String[][] tab2d = new String[size][4];
         List<String> stringList = new ArrayList<>();
@@ -28,18 +30,18 @@ public class TableGui {
         return tab2d;
     }
 
-    static List<String> setList2(Users list){
+    static List<String> setList2(Customer list){
         List<String> stringList = new ArrayList<>();
 
         stringList.add(list.getEmail());
         stringList.add(list.getName());
         stringList.add(list.getSurname());
-        stringList.add(list.getDate().toString());
-
+        stringList.add(list.getDate());
         return  stringList;
     }
-    public JFrame getTableJFrame(List<Users> usersList){
+    public JFrame getTableJFrame(NewClient newClient,List<Customer> usersList){
         jFrame.setTitle("User Table");
+        this.newClient = newClient;
         String [] columnNames = {"Email","Name","Surname","Date"};
         table = new JTable(listToArray(usersList),columnNames);
         ListSelectionModel listSelectionModel = table.getSelectionModel();
@@ -62,10 +64,10 @@ public class TableGui {
         return jFrame;
     }
     void getUpdateJFrameGui(int rowSelected, JTable mode){
-        UpdateFrame updateJF = new UpdateFrame();
+        UpdateFrame updateJF = new UpdateFrame(this.newClient);
         updateFrame.add(updateJF.getUpdateVenue(rowSelected,mode));
         updateFrame.setLocationRelativeTo(null);
         updateFrame.setVisible(true);
-        updateFrame.setSize(550,400);
+        updateFrame.setSize(550,500);
     }
 }

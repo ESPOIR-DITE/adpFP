@@ -1,9 +1,8 @@
-package com.mycompany.adpfp.gui.user;
+package com.mycompany.adpfp.gui.user.user;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.mycompany.adpfp.datas.user.UserCredentials;
 import com.mycompany.adpfp.datas.user.Users;
-import com.mycompany.adpfp.gui.venue.UpdateFrame;
 import com.mycompany.adpfp.io.NewClient;
 import com.mycompany.adpfp.io.user.UserIO;
 
@@ -11,11 +10,9 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.xml.crypto.Data;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -51,10 +48,10 @@ public class UserGui implements ActionListener {
     Border blackline = BorderFactory.createLineBorder(Color.black);
     Font f = new Font("Verdana",Font.BOLD,20);
 
-    static NewClient newClient = null;
+    NewClient newClient ;
 
     private UserIO userIO = new UserIO();
-    public UserGui() {
+    public UserGui(NewClient newClient) {
         userPanel.setLayout(new BorderLayout(10,10));
         newUser.addActionListener(this);
         viewVenue.addActionListener(this);
@@ -65,6 +62,7 @@ public class UserGui implements ActionListener {
         jTextArea.setBorder(blackline);
         userTitleLabel.setFont(f);
         userTitleLabel.setForeground(btnBrown);
+        this.newClient = newClient;
         //System.out.println("new client "+this.newClient);
         userPanel.add(userTitleLabel,BorderLayout.NORTH);
         userPanel.add(getEastPanel(),BorderLayout.CENTER);
@@ -72,63 +70,6 @@ public class UserGui implements ActionListener {
         userPanel.add(jTextArea,BorderLayout.SOUTH);
     }
 
-    public JFrame getTableJFrame(List<Users> usersList){
-//        JTable table = new JTable();
-        jFrame.setTitle("User Table");
-        String [] columnNames = {"Email","Name","Surname","Date"};
-
-        table = new JTable(listToArray(usersList),columnNames);
-        ListSelectionModel listSelectionModel = table.getSelectionModel();
-        listSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
-        listSelectionModel.addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                int row = table.getSelectedRow();
-                getUpdateJFrameGui(row,table);
-            }
-        });
-        int v = ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS;
-        int h = ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS;
-        table.setBounds(30,40,400,400);
-        JScrollPane sp = new JScrollPane(table, v, h);
-        jFrame.add(sp);
-        jFrame.setLocationRelativeTo(null);
-        jFrame.setVisible(true);
-        jFrame.setSize(500,200);
-        return jFrame;
-    }
-    static String[][] listToArray(List<Users> list) {
-        int size = list.size();
-        String[][] tab2d = new String[size][4];
-        List<String> stringList = new ArrayList<>();
-        for(int i = 0; i < list.size(); i++){
-            stringList=(setList2(list.get(i)));
-            for(int j = 0; j < 4; j++) {
-                tab2d[i][j] = stringList.get(j);
-            }
-        }
-        //System.out.println("looping list: "+size);
-        return tab2d;
-    }
-
-    static List<String> setList2(Users list){
-        List<String> stringList = new ArrayList<>();
-
-            stringList.add(list.getEmail());
-            stringList.add(list.getName());
-            stringList.add(list.getSurname());
-            stringList.add(list.getDate().toString());
-
-        return  stringList;
-    }
-    void getUpdateJFrameGui(int rowSelected, JTable mode){
-        UpdateFrame updateJF = new UpdateFrame();
-        updateFrame.add(updateJF.getUpdateVenue(rowSelected,mode));
-        updateFrame.setLocationRelativeTo(null);
-        updateFrame.setVisible(true);
-        updateFrame.setSize(550,400);
-    }
     public JPanel getUserGui(){
         return userPanel;
     }
@@ -220,7 +161,7 @@ public class UserGui implements ActionListener {
                 jsonProcessingException.printStackTrace();
             }
             TableGui tableGui = new TableGui();
-            tableGui.getTableJFrame(usersList);
+            tableGui.getTableJFrame(usersList,this.newClient);
             //getTableJFrame(usersList);
         }
     }

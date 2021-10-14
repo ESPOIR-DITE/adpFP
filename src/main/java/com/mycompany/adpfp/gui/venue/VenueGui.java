@@ -126,7 +126,7 @@ public class VenueGui extends JFrame implements ActionListener {
     }
 
     void getUpdateJFrameGui(int rowSelected, JTable mode){
-       UpdateFrame updateJF = new UpdateFrame();
+       VenueUpdateFrame updateJF = new VenueUpdateFrame(this.newClient);
         updateFrame.add(updateJF.getUpdateVenue(rowSelected,mode));
         updateFrame.setLocationRelativeTo(null);
         updateFrame.setVisible(true);
@@ -236,7 +236,7 @@ public class VenueGui extends JFrame implements ActionListener {
         if(e.getSource() == viewVenue){
             System.out.println("view clicked");
             TableGui tableGui  = new TableGui();
-            tableGui.getTableJFrame(venueIO.readVenues(this.newClient));
+            tableGui.getTableJFrame(venueIO.readVenues(this.newClient),this.newClient);
             //getTableJFrame();
         }
     }

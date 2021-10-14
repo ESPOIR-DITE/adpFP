@@ -2,6 +2,7 @@ package com.mycompany.adpfp.datas.venue;
 
 import lombok.*;
 
+import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.time.LocalDate;
 
@@ -10,7 +11,7 @@ import java.time.LocalDate;
 @Builder(toBuilder = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class Venue {
+public class Venue implements Serializable {
     private int id;
     private String name;
     private String location;

@@ -9,13 +9,40 @@ import java.util.Date;
 import java.util.StringTokenizer;
 
 public class VenueFactory {
-    public static String createNewVenue(Venue venue){
+    public static String updateSetUnavailableVenue(String venueId){
         return   new ServerTokenFactory().getJson(ServerToken.builder()
-                .request("create")
+                .request("update-unavailable")
+                .date(new Date())
+                .domain("venue")
+                .value(venueId)
+                .build());
+    }
+    public static String updateVenue(Venue venue){
+        return   new ServerTokenFactory().getJson(ServerToken.builder()
+                .request("update")
                 .date(new Date())
                 .domain("venue")
                 .value(getVenueFromObject(venue))
                 .build());
+    }
+    public static String deleteVenue(String id){
+        return   new ServerTokenFactory().getJson(ServerToken.builder()
+                .request("delete")
+                .date(new Date())
+                .domain("venue")
+                .value(id)
+                .build());
+    }
+    public static String createNewVenue(Venue venue){
+        return   new ServerTokenFactory().getJson(ServerToken.builder()
+                .request("update")
+                .date(new Date())
+                .domain("venue")
+                .value(getVenueFromObjectForCreation(venue))
+                .build());
+    }
+    public static String getVenueFromObjectForCreation(Venue venue){
+        return venue.getName()+"/"+ venue.getLocation()+"/"+ venue.getCost()+"/"+ venue.getMaxNumGuest()+"/"+ venue.isAvailability()+"/"+ venue.getDate()+"/"+ venue.getDescription()+"/"+ venue.getCategoryId();
     }
     public static String getVenueFromObject(Venue venue){
         return venue.getId()+"/"+ venue.getName()+"/"+ venue.getLocation()+"/"+ venue.getCost()+"/"+ venue.getMaxNumGuest()+"/"+ venue.isAvailability()+"/"+ venue.getDate()+"/"+ venue.getDescription()+"/"+ venue.getCategoryId();
@@ -35,6 +62,13 @@ public class VenueFactory {
     public static String readAllVenues(){
         return   new ServerTokenFactory().getJson(ServerToken.builder()
                 .request("reads")
+                .date(new Date())
+                .domain("venue")
+                .build());
+    }
+    public static String readAllAvailableVenues(){
+        return   new ServerTokenFactory().getJson(ServerToken.builder()
+                .request("read-available")
                 .date(new Date())
                 .domain("venue")
                 .build());

@@ -4,6 +4,7 @@
  */
 package com.mycompany.adpfp.gui;
 
+import com.mycompany.adpfp.datas.user.UserCredentials;
 import com.mycompany.adpfp.io.NewClient;
 import com.mycompany.adpfp.util.ServerTokenFactory;
 
@@ -12,11 +13,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.StringTokenizer;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
 
 /**
  *
@@ -57,6 +54,10 @@ public class LoginPage extends JFrame implements ActionListener {
         add(new JPanel(),BorderLayout.SOUTH);
     }
 
+    void clearLogin(){
+        userNameField.setText("");
+        passwordField.setText("");
+    }
     public JPanel getLoginPage(){
         loginPanel.setLayout(new GridLayout(8,1));
         //loginPanel.setBackground(Color.PINK);
@@ -86,31 +87,58 @@ public class LoginPage extends JFrame implements ActionListener {
     public void close(){
         this.dispose();
     }
-
+    UserCredentials getUserCredential(String response){
+        try{
+            StringTokenizer st = new StringTokenizer(response,"/");
+            return UserCredentials.builder()
+                    .id(st.nextToken())
+                    .email(st.nextToken())
+                    .password(st.nextToken())
+                    .active(Boolean.parseBoolean(st.nextToken()))
+                    .creator(st.nextToken())
+                    .userTypeId(st.nextToken())
+                    .build();
+        }catch (NullPointerException nullPointerException){
+            return null;
+        }
+    }
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == loginBTN){
             String userName = getUserName();
             String password = getPassword();
             if(!userName.isEmpty()&&!password.isEmpty()){
-                close();
                 String result = this.newClient.communicate(ServerTokenFactory.logIn(userName,password));
-                System.out.println(result);
+                System.out.println(getUserCredential(result));
+                UserCredentials userCredentials = getUserCredential(result);
                 //getUser(result);
-                if(getUser(result).equals("admin")){
-                    try {
-                        AdminMainGui adminMainGui = new AdminMainGui(userName,password,this.newClient);
-                    } catch (IOException ioException) {
-                        ioException.printStackTrace();
+                if(result != null){
+                    if(userCredentials.getActive()){
+                        close();
+                        if(getUser(result).equals("admin")){
+                            try {
+                                AdminMainGui adminMainGui = new AdminMainGui(userName,password,this.newClient);
+                            } catch (IOException ioException) {
+                                ioException.printStackTrace();
+                            }
+                        }else if(getUser(result).equals("user")){
+                            try {
+                                UserMainGui userMainGui = new UserMainGui(this.newClient,userName,password);
+                            } catch (IOException ioException) {
+                                ioException.printStackTrace();
+                            }
+                        } else{
+                            LoginPage loginPage = new LoginPage(this.newClient);
+                            JOptionPane.showMessageDialog(this,"User Unknown Role","Login Error",JOptionPane.ERROR_MESSAGE);
+                        }
+                    }else {
+                        JOptionPane.showMessageDialog(this,"User Deactivated","Login Error",JOptionPane.ERROR_MESSAGE);
+                        clearLogin();
                     }
                 }else {
-                    try {
-                        UserMainGui userMainGui = new UserMainGui(userName,password);
-                    } catch (IOException ioException) {
-                        ioException.printStackTrace();
-                    }
+                    JOptionPane.showMessageDialog(this,"Unknown User! \nPlease try again","Login Error",JOptionPane.ERROR_MESSAGE);
+                    clearLogin();
                 }
-
             }
         }
     }

@@ -4,7 +4,7 @@ import lombok.*;
 
 import java.io.Serializable;
 
-@Getter @ToString
+@Getter
 @Builder(toBuilder = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -15,4 +15,13 @@ public class UserCredentials implements Serializable {
     private Boolean active;
     private String creator;
     private String userTypeId;
+    public String toString(){
+        return "Credentials:"+
+                "\nId:        "+id+
+                "\nPassword:  "+password+
+                "\nActive:    "+active+
+                "\nCreator:   "+creator+
+                "\nUser Type: "+userTypeId;
+
+    }
 }

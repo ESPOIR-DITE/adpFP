@@ -1,6 +1,9 @@
-package com.mycompany.adpfp.gui.user;
+package com.mycompany.adpfp.gui.user.customer;
 
-import com.mycompany.adpfp.gui.venue.UpdateFrame;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.mycompany.adpfp.datas.customer.Customer;
+import com.mycompany.adpfp.io.NewClient;
+import com.mycompany.adpfp.io.customer.CustomerIO;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -9,22 +12,22 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.nio.file.Paths;
+import java.util.List;
 
 public class CustomerGui implements ActionListener {
     private JLabel userTitleLabel = new JLabel("NEW CUSTOMER",JLabel.CENTER);
     private JLabel emailLabel = new JLabel("Email");
     private JLabel nameLabel = new JLabel("Name");
     private JLabel surnameLabel = new JLabel("Surname");
-    private JLabel passwordLabel = new JLabel("Password");
+    private JLabel dateLabel = new JLabel("Date Of B");
     private JLabel space = new JLabel("");
     private JTextField emailField = new JTextField(20);
     private JTextField nameField = new JTextField(20);
     private JTextField surnameField = new JTextField(20);
-    private JTextField password = new  JTextField(20);
+    private JTextField dateOfBirthField = new  JTextField(20);
     private JTextArea jTextArea = new JTextArea(4,50);
-    private JButton newUser = new JButton("Create Customer");
-    private JButton viewVenue = new JButton("View Customer");
+    private JButton createCustomer = new JButton("Create Customer");
+    private JButton viewCustomer = new JButton("View Customer");
 
     private JPanel userPanel = new JPanel();
     private JPanel westPanel = new JPanel();
@@ -37,15 +40,18 @@ public class CustomerGui implements ActionListener {
     private Color btnBrownSelected = new Color(166,123,119);
     Font f = new Font("Verdana",Font.BOLD,20);
 
-    public CustomerGui() {
+    private NewClient newClient;
+    private CustomerIO customerIO = new CustomerIO();
+    public CustomerGui(NewClient newClient) {
+        this.newClient = newClient;
         userPanel.setLayout(new BorderLayout(10,10));
-        newUser.addActionListener(this);
-        viewVenue.addActionListener(this);
+        createCustomer.addActionListener(this);
+        viewCustomer.addActionListener(this);
 
-        newUser.setBackground(btnBrown);
-        newUser.setForeground(Color.WHITE);
-        viewVenue.setBackground(btnBrown);
-        viewVenue.setForeground(Color.WHITE);
+        createCustomer.setBackground(btnBrown);
+        createCustomer.setForeground(Color.WHITE);
+        viewCustomer.setBackground(btnBrown);
+        viewCustomer.setForeground(Color.WHITE);
 
         jTextArea.setBorder(blackline);
         userTitleLabel.setFont(f);
@@ -114,7 +120,7 @@ public class CustomerGui implements ActionListener {
         return jFrame;
     }
     void getUpdateJFrameGui(int rowSelected, JTable mode){
-        UpdateFrame updateJF = new UpdateFrame();
+        UpdateFrame updateJF = new UpdateFrame(this.newClient);
         updateFrame.add(updateJF.getUpdateVenue(rowSelected,mode));
         updateFrame.setLocationRelativeTo(null);
         updateFrame.setVisible(true);
@@ -128,7 +134,7 @@ public class CustomerGui implements ActionListener {
         this.westPanel.add(emailLabel);
         this.westPanel.add(nameLabel);
         this.westPanel.add(surnameLabel);
-        this.westPanel.add(passwordLabel);
+        this.westPanel.add(dateLabel);
         return westPanel;
     }
     JPanel getEastPanel(){
@@ -136,22 +142,68 @@ public class CustomerGui implements ActionListener {
         this.eastPanel.add(emailField);
         this.eastPanel.add(nameField);
         this.eastPanel.add(surnameField);
-        this.eastPanel.add(password);
+        this.eastPanel.add(dateOfBirthField);
         this.eastPanel.add(space);
-        this.eastPanel.add(newUser);
-        this.eastPanel.add(viewVenue);
+        this.eastPanel.add(createCustomer);
+        this.eastPanel.add(viewCustomer);
         return eastPanel;
+    }
+    boolean checkFields(){
+        if(emailField.getText().equals("")){
+            JOptionPane.showMessageDialog(null,"Email missing");
+            return false;
+        }
+        if(nameField.getText().equals("")){
+            JOptionPane.showMessageDialog(null,"Name missing");
+            return false;
+        }
+        if(dateOfBirthField.getText().equals("")){
+            JOptionPane.showMessageDialog(null,"Date Of Birth missing");
+            return false;
+        }
+        if(surnameField.getText().equals("")){
+            JOptionPane.showMessageDialog(null,"Surname missing");
+            return false;
+        }
+        return true;
+    }
+    void clearFields(){
+        emailField.setText("");
+        nameField.setText("");
+        surnameField.setText("");
+        dateOfBirthField.setText("");
+    }
+    Customer getCustomer(){
+       return  Customer.builder()
+               .email(emailField.getText())
+                .name(nameField.getText())
+                .surname(surnameField.getText())
+                .date(dateOfBirthField.getText())
+                .build();
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource() == newUser){
-            System.out.println("voila");
-            System.out.println(Paths.get("").toAbsolutePath().toString()+"");
+        if(e.getSource() == createCustomer){
+            if(checkFields()){
+                String result = customerIO.createCustomer(this.newClient,getCustomer());
+                clearFields();
+                jTextArea.append(result);
+            }
         }
-        if(e.getSource() == viewVenue){
+        if(e.getSource() == viewCustomer){
             System.out.println("view clicked");
-            getTableJFrame();
+            //getTableJFrame();
+
+            TableGui tableGui = new TableGui();
+            try {
+                List<Customer> customer = customerIO.readCustomer(newClient);
+                System.out.println(customer);
+                tableGui.getTableJFrame(this.newClient,customer);
+            } catch (JsonProcessingException jsonProcessingException) {
+                jsonProcessingException.printStackTrace();
+            }
+
         }
     }
 }

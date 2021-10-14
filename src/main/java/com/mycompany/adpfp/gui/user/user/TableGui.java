@@ -1,7 +1,6 @@
-package com.mycompany.adpfp.gui.venue;
+package com.mycompany.adpfp.gui.user.user;
 
 import com.mycompany.adpfp.datas.user.Users;
-import com.mycompany.adpfp.datas.venue.Venue;
 import com.mycompany.adpfp.io.NewClient;
 
 import javax.swing.*;
@@ -14,41 +13,36 @@ public class TableGui {
     JFrame jFrame = new JFrame();
     JFrame updateFrame = new JFrame();
     JTable table = new JTable();
-    private NewClient newClient;
+    NewClient newClient;
 
-    static String[][] listToArray(List<Venue> list) {
+    static String[][] listToArray(List<Users> list) {
         int size = list.size();
-        String[][] tab2d = new String[size][9];
+        String[][] tab2d = new String[size][4];
         List<String> stringList = new ArrayList<>();
         for(int i = 0; i < list.size(); i++){
             stringList=(setList2(list.get(i)));
-            for(int j = 0; j < 9; j++) {
+            for(int j = 0; j < 4; j++) {
                 tab2d[i][j] = stringList.get(j);
             }
         }
         //System.out.println("looping list: "+size);
         return tab2d;
     }
-
-    static List<String> setList2(Venue list){
+    static List<String> setList2(Users list){
         List<String> stringList = new ArrayList<>();
 
-        stringList.add(list.getId()+"");
+        stringList.add(list.getEmail());
         stringList.add(list.getName());
-        stringList.add(list.getLocation());
-        stringList.add(list.getCost()+"");
-        stringList.add(list.getMaxNumGuest()+"");
-        stringList.add(list.isAvailability()+"");
-        stringList.add(list.getDate());
-        stringList.add(list.getDescription());
-        stringList.add(list.getCategoryId());
+        stringList.add(list.getSurname());
+        stringList.add(list.getDate().toString());
 
         return  stringList;
     }
-    public JFrame getTableJFrame(List<Venue> usersList, NewClient client){
-        jFrame.setTitle("Venue Table");
-        this.newClient = client;
-        String [] columnNames = {"id","Name","Location","Cost","Max numb","Available","Date","Description","Category"};
+
+    public JFrame getTableJFrame(List<Users> usersList, NewClient newClient){
+        jFrame.setTitle("User Table");
+        this.newClient = newClient;
+        String [] columnNames = {"Email","Name","Surname","Date"};
         table = new JTable(listToArray(usersList),columnNames);
         ListSelectionModel listSelectionModel = table.getSelectionModel();
         listSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -70,10 +64,8 @@ public class TableGui {
         return jFrame;
     }
     void getUpdateJFrameGui(int rowSelected, JTable mode){
-        //UpdateFrame updateJF = new UpdateFrame();
-        VenueUpdateFrame venueUpdateFrame = new VenueUpdateFrame(this.newClient);
-        //updateFrame.add(updateJF.getUpdateVenue(rowSelected,mode));
-        updateFrame.add(venueUpdateFrame.getUpdateVenue(rowSelected,mode));
+        UpdateFrame updateJF = new UpdateFrame(this.newClient);
+        updateFrame.add(updateJF.getUpdateVenue(rowSelected,mode));
         updateFrame.setLocationRelativeTo(null);
         updateFrame.setVisible(true);
         updateFrame.setSize(550,400);

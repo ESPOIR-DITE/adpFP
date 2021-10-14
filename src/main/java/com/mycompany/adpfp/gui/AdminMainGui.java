@@ -4,7 +4,7 @@
  */
 package com.mycompany.adpfp.gui;
 
-import com.mycompany.adpfp.gui.user.UserGui;
+import com.mycompany.adpfp.gui.user.user.UserGui;
 import com.mycompany.adpfp.gui.venue.VenueGui;
 import com.mycompany.adpfp.io.NewClient;
 
@@ -12,14 +12,12 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
 
 import static com.mycompany.adpfp.util.Images.getAdminImage;
-import static com.mycompany.adpfp.util.Images.getUserImage;
 
 /**
  *
@@ -37,10 +35,10 @@ public class AdminMainGui extends JFrame implements ActionListener {
 
     //
     VenueGui venueGui = null;
-    UserGui userGui = new UserGui();
     //panels
     private JPanel venuePanel = null;
-    private JPanel userPanel = new UserGui().getUserGui();
+    private JPanel userPanel;
+    UserGui userGui;
     private JLabel pic;
     private Color btnBrown = new Color(81,43,40);
     private Color btnBrownSelected = new Color(166,123,119);
@@ -54,6 +52,8 @@ public class AdminMainGui extends JFrame implements ActionListener {
         super("ADMIN POSTAL");
         this.venueGui = new VenueGui(newClient);
         this.venuePanel = new VenueGui(newClient).getCreateVenuePanel();
+        userPanel = new UserGui(newClient).getUserGui();
+        userGui = new UserGui(newClient);
         this.newClient = newClient;
         setLayout(new BorderLayout(5,5));
         setSize(700,480);

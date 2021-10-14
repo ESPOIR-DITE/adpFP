@@ -1,5 +1,9 @@
 package com.mycompany.adpfp.gui.venue;
 
+import com.mycompany.adpfp.datas.venue.Venue;
+import com.mycompany.adpfp.io.NewClient;
+import com.mycompany.adpfp.io.venue.VenueIO;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -35,13 +39,17 @@ public class VenueUpdateFrame implements ActionListener {
     private JButton deleteUser = new JButton("Delete");
     private Color btnBrown = new Color(81,43,40);
     Font f = new Font("Verdana",Font.BOLD,20);
+    private NewClient newClient;
+    private VenueIO venueIO = new VenueIO();
 
-    public VenueUpdateFrame() {
+    public VenueUpdateFrame(NewClient newClient) {
         userUpdatePanel.setLayout(new BorderLayout(5,5));
         updateUser.addActionListener(this);
+        deleteUser.addActionListener(this);
         jTextUpdateArea.setEditable(false);
         title.setFont(f);
         title.setForeground(btnBrown);
+        this.newClient = newClient;
         userUpdatePanel.add(title,BorderLayout.NORTH);
         userUpdatePanel.add(getWestUpdatePanel(),BorderLayout.WEST);
         userUpdatePanel.add(getEastUpdatePanel(),BorderLayout.CENTER);
@@ -103,10 +111,94 @@ public class VenueUpdateFrame implements ActionListener {
         return eastUpdatePanel;
     }
 
+    boolean checkIfEmpty(){
+        if(idJTextField.getText().equals("")){
+            JOptionPane.showMessageDialog(null,"Id Missing","MISSING ERROR",JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if(nameJTextField.getText().equals("")){
+            JOptionPane.showMessageDialog(null,"Name Missing","MISSING ERROR",JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if(locationJTextField.getText().equals("")){
+            JOptionPane.showMessageDialog(null,"Location Missing","MISSING ERROR",JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if(costJTextField.getText().equals("")){
+            JOptionPane.showMessageDialog(null,"Cost Missing","MISSING ERROR",JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if(maxNumOfPplJTextField.getText().equals("")){
+            JOptionPane.showMessageDialog(null,"Number of Guest Missing","MISSING ERROR",JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if(availabilityTextField.getText().equals("")){
+            JOptionPane.showMessageDialog(null,"Availability Missing","MISSING ERROR",JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if(dateTextField.getText().equals("")){
+            JOptionPane.showMessageDialog(null,"Date Missing","MISSING ERROR",JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if(typeJTextField.getText().equals("")){
+            JOptionPane.showMessageDialog(null,"Category Missing","MISSING ERROR",JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        return true;
+    }
+
+    void clearField(){
+        idJTextField.setText("");
+        nameJTextField.setText("");
+        locationJTextField.setText("");
+        costJTextField.setText("");
+        maxNumOfPplJTextField.setText("");
+        availabilityTextField.setText("");
+        dateTextField.setText("");
+        typeJTextField.setText("");
+    }
+
+    boolean getAvailable(){
+        if(availabilityTextField.getText().equals("")||availabilityTextField.getText().equals("true")){
+            return true;
+        }
+        return false;
+    }
+
+    Venue getVenue(){
+        return Venue.builder()
+                .id(Integer.parseInt(idJTextField.getText()))
+                .name(nameJTextField.getText())
+                .location(locationJTextField.getText())
+                .cost(Double.parseDouble(costJTextField.getText()))
+                .maxNumGuest(Integer.parseInt(maxNumOfPplJTextField.getText()))
+                .availability(getAvailable())
+                .date(dateTextField.getText())
+                .categoryId(typeJTextField.getText())
+                .build();
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource()== updateUser){
-            System.out.println("about to update");
+            System.out.println(idJTextField.getText());
+           if(checkIfEmpty()){
+               Venue venue = getVenue();
+               String result = venueIO.update(this.newClient,venue);
+               jTextUpdateArea.append(result);
+           }
+        }
+        if(e.getSource()== deleteUser){
+            int result = JOptionPane.showConfirmDialog(null, "Are you sure?", "WARNING", JOptionPane.YES_NO_OPTION);
+            if(result==0&&checkIfEmpty()&&!idJTextField.getText().equals("")){
+                String resultString = venueIO.delete(this.newClient,idJTextField.getText());
+                clearField();
+                jTextUpdateArea.append(resultString);
+                updateJFrame.dispose();
+            }else {
+                JOptionPane.showMessageDialog(null,"Could not delete","Error update",JOptionPane.ERROR_MESSAGE);
+
+            }
         }
     }
 }
