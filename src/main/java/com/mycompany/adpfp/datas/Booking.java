@@ -2,8 +2,6 @@ package com.mycompany.adpfp.datas;
 
 import lombok.*;
 
-import java.time.LocalDate;
-
 @Getter
 @ToString
 @Builder(toBuilder = true)

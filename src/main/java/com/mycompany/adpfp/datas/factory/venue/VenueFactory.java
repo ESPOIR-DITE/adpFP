@@ -17,6 +17,14 @@ public class VenueFactory {
                 .value(venueId)
                 .build());
     }
+    public static String updateSetAvailableVenue(String venueId){
+        return   new ServerTokenFactory().getJson(ServerToken.builder()
+                .request("update-available")
+                .date(new Date())
+                .domain("venue")
+                .value(venueId)
+                .build());
+    }
     public static String updateVenue(Venue venue){
         return   new ServerTokenFactory().getJson(ServerToken.builder()
                 .request("update")

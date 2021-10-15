@@ -25,6 +25,14 @@ public class BookingFactory {
                 .value(id)
                 .build());
     }
+    public static String unOccupiedBooking(String id){
+        return   new ServerTokenFactory().getJson(ServerToken.builder()
+                .request("unbooked")
+                .date(new Date())
+                .domain("booking")
+                .value(id)
+                .build());
+    }
     public static String createNewBooking(Booking customer){
         return   new ServerTokenFactory().getJson(ServerToken.builder()
                 .request("create")

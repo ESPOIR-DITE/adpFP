@@ -14,14 +14,17 @@ public class TableGui {
     JFrame updateFrame = new JFrame();
     JTable table = new JTable();
     private NewClient newClient;
+    JPanel userVenue;
+    String userEmail;
+    private List<Booking> bookings = new ArrayList<>();
 
     static String[][] listToArray(List<Booking> list) {
         int size = list.size();
-        String[][] tab2d = new String[size][5];
+        String[][] tab2d = new String[size][6];
         List<String> stringList = new ArrayList<>();
         for(int i = 0; i < list.size(); i++){
             stringList=(setList2(list.get(i)));
-            for(int j = 0; j < 5; j++) {
+            for(int j = 0; j < 6; j++) {
                 tab2d[i][j] = stringList.get(j);
             }
         }
@@ -33,16 +36,20 @@ public class TableGui {
 
         stringList.add(list.getId()+"");
         stringList.add(list.getCustomerEmail());
+        stringList.add(list.getUserEmail());
         stringList.add(list.getVenueId());
         stringList.add(list.getDate());
         stringList.add(list.getDescription());
         return  stringList;
     }
-    public JFrame getTableJFrame(NewClient newClient,List<Booking> usersList){
+    public JFrame getTableJFrame(JPanel userVenue,String userEmail,NewClient newClient,List<Booking> usersList){
+        this.bookings = usersList;
+        this.userVenue = userVenue;
+        this.userEmail = userEmail;
         jFrame.setTitle("Booking Table");
         this.newClient = newClient;
         System.out.println("booking List: "+usersList);
-        String [] columnNames = {"ID","CUSTOMER EMAIL","VENUE ID","DATE","DESCRIPTION"};
+        String [] columnNames = {"ID","CUSTOMER EMAIL","User","VENUE ID","DATE","DESCRIPTION"};
         table = new JTable(listToArray(usersList),columnNames);
         ListSelectionModel listSelectionModel = table.getSelectionModel();
         listSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -65,9 +72,15 @@ public class TableGui {
     }
     void getUpdateJFrameGui(int rowSelected, JTable mode){
         UpdateFrame updateJF = new UpdateFrame(this.newClient);
-        updateFrame.add(updateJF.getUpdateVenue(rowSelected,mode));
-        updateFrame.setLocationRelativeTo(null);
-        updateFrame.setVisible(true);
-        updateFrame.setSize(550,400);
+        updateJF.setUpFrame(this.userVenue,this.userEmail,rowSelected,mode,this.bookings);
+        jFrame.dispose();
     }
+
+//    void getUpdateJFrameGui(int rowSelected, JTable mode){
+//        UpdateFrame updateJF = new UpdateFrame(this.newClient);
+//        updateFrame.add(updateJF.getUpdateVenue(rowSelected,mode));
+//        updateFrame.setLocationRelativeTo(null);
+//        updateFrame.setVisible(true);
+//        updateFrame.setSize(550,400);
+//    }
 }

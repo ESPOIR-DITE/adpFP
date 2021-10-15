@@ -86,6 +86,19 @@ public class VenueIO {
         }
         return "Error occurred";
     }
+    public String updateAvailable(NewClient newClient, String venueId){
+        String venueString = VenueFactory.updateSetAvailableVenue(venueId);
+        System.out.println(venueString);
+        String result = newClient.communicate(venueString);
+        try {
+            if( result.equals("true")){
+                return "You have successfully updated venue";
+            }
+        }catch (NullPointerException nullPointerException){
+            return "Error occurred";
+        }
+        return "Error occurred";
+    }
     public String delete(NewClient newClient, String id){
         String customerString = VenueFactory.deleteVenue(id);
         System.out.println(customerString);

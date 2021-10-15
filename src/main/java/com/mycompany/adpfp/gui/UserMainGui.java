@@ -46,7 +46,7 @@ public class UserMainGui extends JFrame implements ActionListener {
         super("USER POSTAL");
         this.newClient = newClient;
         customerJPanel = new CustomerGui(this.newClient).getCustomerGui();
-        userVenuePanel = new UserVenueGui(this.newClient).getUserVenuePanel(this.newClient);
+        userVenuePanel = new UserVenueGui(this.newClient,userName).getUserVenuePanel(this.newClient);
         setLayout(new BorderLayout(5,5));
         setSize(700,480);
         bookingBtn.setBackground(btnBrown);

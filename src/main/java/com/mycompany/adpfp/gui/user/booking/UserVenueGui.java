@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.mycompany.adpfp.datas.Booking;
 import com.mycompany.adpfp.datas.customer.Customer;
 import com.mycompany.adpfp.datas.venue.Venue;
+import com.mycompany.adpfp.gui.Asset;
 import com.mycompany.adpfp.io.NewClient;
 import com.mycompany.adpfp.io.booking.BookingIO;
 import com.mycompany.adpfp.io.customer.CustomerIO;
@@ -66,11 +67,13 @@ public class UserVenueGui extends JFrame implements ActionListener {
     Font f = new Font("Verdana",Font.BOLD,20);
     private VenueIO venueIO = new VenueIO();
     private CustomerIO customerIO = new CustomerIO();
-    public UserVenueGui(NewClient newClient) throws HeadlessException {
+    private String userEmail = null;
+    public UserVenueGui(NewClient newClient,String userName) throws HeadlessException {
         createVenuePanel.setLayout(new BorderLayout(10,10));
         createBooking.addActionListener(this);
         viewBookings.addActionListener(this);
         this.newClient = newClient;
+        this.userEmail = userName;
         customers = new JComboBox(getCustomers());
         venues = new JComboBox(getVenues());
         venues.addActionListener(this);
@@ -90,9 +93,9 @@ public class UserVenueGui extends JFrame implements ActionListener {
     }
 
     String[] getVenues(){
-        System.out.println(this.newClient);
-        List<String> venueList = venueIO.readAvailableVenues(this.newClient);
-        System.out.println("venueList "+venueList);
+         //System.out.println(this.newClient);
+         List<String> venueList = venueIO.readAvailableVenues(this.newClient);
+         System.out.println("venueList "+venueList);
         return  venueIO.readAvailableVenues(this.newClient).toArray(new String[0]);
     }
     String[] getCustomers(){
@@ -198,6 +201,7 @@ public class UserVenueGui extends JFrame implements ActionListener {
 
     private Booking getBooking(){
         return Booking.builder()
+                .userEmail(this.userEmail)
                 .customerEmail(this.customerId)
                 .venueId(this.venueId)
                 .date(new Date().toString())
@@ -205,14 +209,12 @@ public class UserVenueGui extends JFrame implements ActionListener {
     }
 
     void clearFields(){
-        nameJTextField.setText("");
-        locationJTextField.setText("");
-        typeJTextField.setText("");
-        costJTextField.setText("");
+        venues.setSelectedIndex(0);
+        customers.setSelectedIndex(0);
+        dateField.setText("");
+        periodField.setText("");
         maxNumOfPplJTextField.setText("");
     }
-
-
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -230,13 +232,14 @@ public class UserVenueGui extends JFrame implements ActionListener {
             System.out.println("view clicked");
             TableGui tableGui  = new TableGui();
             try {
-                tableGui.getTableJFrame(this.newClient,bookingIO.readAllBooking(this.newClient));
+                tableGui.getTableJFrame(createVenuePanel,this.userEmail,this.newClient,bookingIO.readAllBooking(this.newClient));
             } catch (JsonProcessingException jsonProcessingException) {
                 jsonProcessingException.printStackTrace();
             }
            // getTableJFrame();
         }
         if(e.getSource() == customers){
+            customers.setBackground(Asset.getGreen());
             this.userSelected = (String) customers.getSelectedItem();
             String result = customers.getSelectedItem().toString();
             this.customerId = getIds(result);
@@ -244,6 +247,7 @@ public class UserVenueGui extends JFrame implements ActionListener {
             //this.userSelected = (String) customers.getSelectedItem();
         }
         if(e.getSource() == venues){
+            venues.setBackground(Asset.getGreen());
             this.venueSelected = (String) venues.getSelectedItem();
             String result = venues.getSelectedItem().toString();
             this.venueId = getIds(result);
